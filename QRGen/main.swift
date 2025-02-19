@@ -6,27 +6,36 @@
 //
 
 import Cocoa
+import ArgumentParser
 
+//TODO: Option to specify output file
 //TODO: Get input string from stdin
 
-func generateQRCode(from string: String) -> NSImage? {
-    let data = string.data(using: String.Encoding.ascii)
-
-    if let filter = CIFilter(name: "CIQRCodeGenerator") {
-        filter.setValue(data, forKey: "inputMessage")
-        let transform = CGAffineTransform(scaleX: 3, y: 3)
-
-        if let output = filter.outputImage?.transformed(by: transform) {
-            let rep = NSCIImageRep(ciImage: output)
-            let outputImage = NSImage(size: rep.size)
-            outputImage.addRepresentation(rep)
-            return outputImage
-        }
-    }
-
-    return nil
+print(String(CommandLine.arguments.count))
+var input: String = ""
+if CommandLine.arguments.count > 1 {
+    input = CommandLine.arguments.last ?? ""
 }
 
-generateQRCode(from: "Hello World!")
+if input.lengthOfBytes(using: .utf8) <= 0 {
+    print("Input text to encode:")
+    input = readLine(strippingNewline: true) ?? ""
+}
 
-//TODO: Save image out to file
+if input.isEmpty {
+    exit(1)
+}
+
+#if DEBUG
+var path = FileManager.default.homeDirectoryForCurrentUser.path
+path.append("/Desktop/\(input).png")
+#else
+var path = FileManager.default.currentDirectoryPath
+path.append("/\(input).png")
+#endif
+
+let generator = qrGenerator()
+let qrCode = generator.generateQRCode(from: input)
+try generator.saveImage(qrCode!, to: path)
+
+exit(0)
