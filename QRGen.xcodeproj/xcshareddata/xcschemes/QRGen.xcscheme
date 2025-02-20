@@ -54,6 +54,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-o /Users/bamersbach/Desktop/Test.png"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-h"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

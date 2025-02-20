@@ -8,15 +8,13 @@
 import Foundation
 import ArgumentParser
 
-//TODO: Option to specify output file
-
 @main
-struct QRGen: ParsableCommand {
+struct qrgen: ParsableCommand {
+    @Option(name: [.customShort("o"), .customLong("output-path")], help: "Path to save QR code")
+    var outputPath: String = ""
+    
     @Argument(help: "Text to encode")
     var textToEncode: String = ""
-    
-    @Option(name: [.customShort("o"), .customLong("output")], help: "Path to save QR code")
-    var path: String = ""
     
     mutating func run() throws {
         if textToEncode.isEmpty {
@@ -28,18 +26,18 @@ struct QRGen: ParsableCommand {
             }
         }
         
-        if path.isEmpty {
-            path = FileManager.default.currentDirectoryPath + "/\(textToEncode).png"
+        if outputPath.isEmpty {
+            outputPath = FileManager.default.currentDirectoryPath + "/\(textToEncode).png"
         }
         
         let generator = generator()
         let qrCode = generator.generateQRCode(from: textToEncode)
         do {
-            try generator.saveImage(qrCode!, to: path)
+            try generator.saveImage(qrCode!, to: outputPath)
         } catch {
             print(error.localizedDescription)
         }
-        print("File saved to: \(path)")
+        print("File saved to: \(outputPath)")
     }
 }
 
