@@ -7,7 +7,7 @@
 
 import Cocoa
 
-struct qrGenerator {
+struct generator {
     func generateQRCode(from string: String) -> NSImage? {
         let data = string.data(using: String.Encoding.ascii)
 

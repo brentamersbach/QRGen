@@ -9,7 +9,8 @@ import Foundation
 
 //TODO: Option to specify output file
 
-struct App {
+@main
+struct QRGen {
     static func main() {
         print(String(CommandLine.arguments.count))
         var input: String = ""
@@ -34,7 +35,7 @@ struct App {
         path.append("/\(input).png")
         #endif
 
-        let generator = qrGenerator()
+        let generator = generator()
         let qrCode = generator.generateQRCode(from: input)
         do {
             try generator.saveImage(qrCode!, to: path)
