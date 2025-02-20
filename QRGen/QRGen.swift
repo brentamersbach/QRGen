@@ -6,44 +6,40 @@
 //
 
 import Foundation
+import ArgumentParser
 
 //TODO: Option to specify output file
 
 @main
-struct QRGen {
-    static func main() {
-        print(String(CommandLine.arguments.count))
-        var input: String = ""
-        if CommandLine.arguments.count > 1 {
-            input = CommandLine.arguments.last ?? ""
-        }
-
-        if input.lengthOfBytes(using: .utf8) <= 0 {
+struct QRGen: ParsableCommand {
+    @Argument(help: "Text to encode")
+    var textToEncode: String = ""
+    
+    @Option(name: [.customShort("o"), .customLong("output")], help: "Path to save QR code")
+    var path: String = ""
+    
+    mutating func run() throws {
+        if textToEncode.isEmpty {
             print("Input text to encode:")
-            input = readLine(strippingNewline: true) ?? ""
+            if let input = readLine(strippingNewline: true) {
+                textToEncode = input
+            } else {
+                throw ExitCode.validationFailure
+            }
         }
-
-        if input.isEmpty {
-            exit(1)
+        
+        if path.isEmpty {
+            path = FileManager.default.currentDirectoryPath + "/\(textToEncode).png"
         }
-
-        #if DEBUG
-        var path = FileManager.default.homeDirectoryForCurrentUser.path
-        path.append("/Desktop/\(input).png")
-        #else
-        var path = FileManager.default.currentDirectoryPath
-        path.append("/\(input).png")
-        #endif
-
+        
         let generator = generator()
-        let qrCode = generator.generateQRCode(from: input)
+        let qrCode = generator.generateQRCode(from: textToEncode)
         do {
             try generator.saveImage(qrCode!, to: path)
         } catch {
             print(error.localizedDescription)
-            exit(2)
         }
-        exit(0)
+        print("File saved to: \(path)")
     }
 }
 

@@ -53,8 +53,8 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "&quot;Hello World&quot;"
-            isEnabled = "NO">
+            argument = "-o /Users/bamersbach/Desktop/Test.png"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

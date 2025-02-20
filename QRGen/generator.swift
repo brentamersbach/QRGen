@@ -28,7 +28,7 @@ struct generator {
 
     func saveImage(_ image: NSImage, to path: String) throws {
         if let tiffData = image.tiffRepresentation {
-            let pathUrl = path.isEmpty ? URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString) : URL(fileURLWithPath: path)
+            let pathUrl = URL(fileURLWithPath: path)
             let rep = NSBitmapImageRep(data: tiffData)
             let pngData = rep?.representation(using: .png, properties: [:])
             try pngData!.write(to: pathUrl)
