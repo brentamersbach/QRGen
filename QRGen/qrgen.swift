@@ -18,8 +18,16 @@ struct qrgen: ParsableCommand {
     
     mutating func run() throws {
         if textToEncode.isEmpty {
-            print("Input text to encode:")
-            if let input = readLine(strippingNewline: true) {
+//            print("Input text to encode:")
+//            if let input = readLine(strippingNewline: true) {
+//                textToEncode = input
+//            } else {
+//                throw ExitCode.validationFailure
+//            }
+            let stdinput = FileHandle.standardInput
+            let data = stdinput.availableData
+            if let input = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
+            {
                 textToEncode = input
             } else {
                 throw ExitCode.validationFailure
@@ -27,7 +35,17 @@ struct qrgen: ParsableCommand {
         }
         
         if outputPath.isEmpty {
-            outputPath = FileManager.default.currentDirectoryPath + "/\(textToEncode).png"
+            if textToEncode.lengthOfBytes(using: .utf8) <= 12 {
+                let filename = textToEncode
+            } else {
+                let filename = textToEncode.utf8.prefix(12)
+            }
+            let fileManager = FileManager.default
+            outputPath = fileManager.currentDirectoryPath + "/\(textToEncode).png"
+            if fileManager.fileExists(atPath: outputPath) {
+                print("File already exists at \(outputPath). Please specify a different output path.")
+                throw ExitCode.validationFailure
+            }
         }
         
         let generator = generator()
