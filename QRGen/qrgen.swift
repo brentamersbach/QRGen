@@ -30,6 +30,7 @@ struct qrgen: ParsableCommand {
             }
         }
         
+        let fileManager = FileManager.default
         if outputPath.isEmpty {
             var filename = ""
             if textToEncode.lengthOfBytes(using: .utf8) <= 12 {
@@ -37,12 +38,11 @@ struct qrgen: ParsableCommand {
             } else {
                 filename = String(textToEncode.prefix(12))
             }
-            let fileManager = FileManager.default
-            outputPath = fileManager.currentDirectoryPath + "/\(filename).png"
-            if fileManager.fileExists(atPath: outputPath) {
-                print("File already exists at \(outputPath). Please specify a different output path.")
-                throw ExitCode.validationFailure
-            }
+            outputPath = fileManager.homeDirectoryForCurrentUser.path() + "/Desktop/\(filename).png"
+        }
+        if fileManager.fileExists(atPath: outputPath) {
+            print("File already exists at \(outputPath). Please specify a different output path.")
+            throw ExitCode.validationFailure
         }
         
         let generator = generator()

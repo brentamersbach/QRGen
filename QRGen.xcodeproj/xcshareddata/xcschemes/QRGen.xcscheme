@@ -54,6 +54,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-h"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "&quot;&#x304a;&#x306f;&#x3088;&#x3046;&#x771f;&#x4e16;&#x3055;&#x3093;&#xff01;&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

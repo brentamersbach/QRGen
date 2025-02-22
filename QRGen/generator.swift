@@ -9,7 +9,7 @@ import Cocoa
 
 struct generator {
     func generateQRCode(from string: String, withScale scale: CGFloat) -> NSImage? {
-        let data = string.data(using: String.Encoding.ascii)
+        let data = string.data(using: String.Encoding.utf8)
 
         if let filter = CIFilter(name: "CIQRCodeGenerator") {
             filter.setValue(data, forKey: "inputMessage")
