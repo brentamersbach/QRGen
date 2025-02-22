@@ -8,12 +8,12 @@
 import Cocoa
 
 struct generator {
-    func generateQRCode(from string: String) -> NSImage? {
+    func generateQRCode(from string: String, withScale scale: CGFloat) -> NSImage? {
         let data = string.data(using: String.Encoding.ascii)
 
         if let filter = CIFilter(name: "CIQRCodeGenerator") {
             filter.setValue(data, forKey: "inputMessage")
-            let transform = CGAffineTransform(scaleX: 20, y: 20)
+            let transform = CGAffineTransform(scaleX: scale, y: scale)
 
             if let output = filter.outputImage?.transformed(by: transform) {
                 let rep = NSCIImageRep(ciImage: output)
